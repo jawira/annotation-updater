@@ -60,8 +60,7 @@ final class AnnotationUpdater extends AbstractFixer implements ConfigurableFixer
     return $tokens->isTokenKindFound(\T_CLASS)
       || $tokens->isTokenKindFound(\T_INTERFACE)
       || $tokens->isTokenKindFound(\T_TRAIT)
-      || $tokens->isTokenKindFound(\T_ENUM)
-      || $tokens->isTokenKindFound(\T_FUNCTION);
+      || $tokens->isTokenKindFound(\T_ENUM);
   }
 
   /**
@@ -121,7 +120,7 @@ final class AnnotationUpdater extends AbstractFixer implements ConfigurableFixer
     for ($index = 0, $count = $tokens->count(); $index < $count; ++$index) {
       $token = $tokens[$index];
 
-      if (!$token->isGivenKind([\T_CLASS, \T_INTERFACE, \T_TRAIT, \T_ENUM, \T_FUNCTION])) {
+      if (!$token->isGivenKind([\T_CLASS, \T_INTERFACE, \T_TRAIT, \T_ENUM])) {
         continue;
       }
 
