@@ -108,6 +108,7 @@ final class AnnotationUpdater extends AbstractFixer implements ConfigurableFixer
 
   /**
    * Applies the fix to the given file's tokens.
+   *
    * Iterates through tokens to find class/interface/trait/enum/function declarations
    * and updates their docblocks based on the configured updates.
    */
@@ -124,8 +125,22 @@ final class AnnotationUpdater extends AbstractFixer implements ConfigurableFixer
         continue;
       }
 
+      if (RenderHelper::isAnonymousClass($tokens)) {
+        continue;
+      }
+
       $docBlockIndex = RenderHelper::findDocCommentIndex($tokens, $index);
       if (null === $docBlockIndex) {
+        // At least one Action must need a DocBlock to work properly
+        $docblockIsNeeded = array_reduce($this->actions, fn(bool $c, Action $a): bool => $c || $a->needsDocblock(), false);
+        if (!$docblockIsNeeded) {
+          continue;
+        }
+        // Create new docblock
+        $newDocComment = RenderHelper::rebuildDocComment([]);
+        $tokens->insertAt($index, [new Token([\T_DOC_COMMENT, $newDocComment]), new Token([\T_WHITESPACE, "\n"])]);
+        $count = $tokens->count();
+        ++$index;
         continue;
       }
 

@@ -110,4 +110,29 @@ class RenderHelper
     return implode("\n", $lines);
   }
 
+  /**
+   * Detects if all class tokens in the given tokens are anonymous classes.
+   *
+   * Anonymous class uses `\T_CLASS` as normal classes, therefore a special detector is needed.
+   */
+  public static function isAnonymousClass(Tokens $tokens): bool
+  {
+    // Check if there are any class tokens
+    if (!$tokens->isTokenKindFound(\T_CLASS)) {
+      return false;
+    }
+
+    // Check all class tokens to see if they are all anonymous
+    foreach ($tokens as $index => $token) {
+      if ($token->isGivenKind(\T_CLASS)) {
+        $prevIndex = $tokens->getPrevMeaningfulToken($index);
+        // If any class token is NOT preceded by 'new', it's a named class
+        if ($prevIndex === null || $tokens[$prevIndex]->getContent() !== 'new') {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
 }

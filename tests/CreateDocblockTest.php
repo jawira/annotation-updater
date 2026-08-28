@@ -1,0 +1,94 @@
+<?php declare(strict_types=1);
+
+
+use Jawira\AnnotationUpdater\AnnotationUpdater;
+use Jawira\AnnotationUpdaterTests\CsTestCase;
+use PhpCsFixer\Tokenizer\Tokens;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+
+
+#[CoversClass(AnnotationUpdater::class)]
+final class CreateDocblockTest extends CsTestCase
+{
+  public function testPreserve(): void
+  {
+    $code = <<<'PHP'
+      <?php
+      class Foo
+      {
+      }
+      PHP;
+
+    $expected = <<<'PHP'
+      <?php
+      /**
+       * @author John Connor
+       */
+      class Foo
+      {
+      }
+      PHP;
+
+    $config = [
+      'annotations' => [
+        ['tag' => 'author', 'value' => 'John Connor', 'mode' => 'preserve'],
+      ],
+    ];
+    $actual = $this->generateCode($code, $config);
+    $this->assertSame($expected, $actual);
+  }
+
+  public function testReplace(): void
+  {
+    $code = <<<'PHP'
+      <?php
+      class Foo
+      {
+      }
+      PHP;
+
+    $expected = <<<'PHP'
+      <?php
+      /**
+       * @author Sarah Connor
+       */
+      class Foo
+      {
+      }
+      PHP;
+
+    $config = [
+      'annotations' => [
+        ['tag' => 'author', 'value' => 'Sarah Connor', 'mode' => 'replace'],
+      ],
+    ];
+    $actual = $this->generateCode($code, $config);
+    $this->assertSame($expected, $actual);
+  }
+
+  public function testRemove(): void
+  {
+    $code = <<<'PHP'
+      <?php
+      class Foo
+      {
+      }
+      PHP;
+
+    $expected = <<<'PHP'
+      <?php
+      class Foo
+      {
+      }
+      PHP;
+
+    $config = [
+      'annotations' => [
+        ['tag' => 'author', 'mode' => 'remove'],
+      ],
+    ];
+    $actual = $this->generateCode($code, $config);
+    $this->assertSame($expected, $actual);
+  }
+}
