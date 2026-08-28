@@ -1,2 +1,6 @@
 /.idea
+/.phpstan
+/.phpunit.cache
 /vendor
+/composer.lock
+deleteme*

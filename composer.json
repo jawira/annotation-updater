@@ -1,23 +1,37 @@
 {
   "name": "jawira/annotation-updater",
   "type": "library",
+  "description": "PHP-CS-Fixer custom fixer to update annotations",
+  "keywords": [
+    "php-cs-fixer",
+    "phpdoc",
+    "annotation",
+    "code-style"
+  ],
   "license": "MIT",
-  "autoload": {
-    "psr-4": {
-      "Jawira\\AnnotationUpdater\\": "src/"
-    }
-  },
   "authors": [
     {
       "name": "Jawira Portugal",
       "email": "dev@tugal.be"
     }
   ],
-  "require-dev": {
-    "friendsofphp/php-cs-fixer": "^3.92",
-    "jawira/skeleton": "^2.29"
-    },
   "require": {
-    "php": "^8"
+    "php": "^8.2"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.95.23",
+    "jawira/skeleton": "^2.31",
+    "phpunit/phpunit": "^11",
+    "phpstan/phpstan": "^2.2.9"
+  },
+  "autoload": {
+    "psr-4": {
+      "Jawira\\AnnotationUpdater\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Jawira\\AnnotationUpdaterTests\\": "tests/"
+    }
   }
 }
