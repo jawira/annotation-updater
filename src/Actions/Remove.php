@@ -31,4 +31,12 @@ final class Remove extends Action
       fn(string $line): bool => !RenderHelper::matchesTag($line, $this),
     ));
   }
+
+  /**
+   * "Remove" mode should not create a docblock if one doesn't exist.
+   */
+  public function needsDocblock(): bool
+  {
+    return false;
+  }
 }

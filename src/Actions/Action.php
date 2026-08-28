@@ -47,4 +47,12 @@ abstract class Action
 
     return $tagLines;
   }
+
+  /**
+   * Tells if this action should create a docblock when one doesn't exist.
+   */
+  public function needsDocblock(): bool
+  {
+    return true;
+  }
 }
