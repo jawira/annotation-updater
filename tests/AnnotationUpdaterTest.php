@@ -177,14 +177,14 @@ final class AnnotationUpdaterTest extends CsTestCase
   public function testAddsAnnotationWhenMissing(): void
   {
     $code = <<<'CODE'
-      <?php
-      /**
-       * Some description.
-       */
-      class Foo
-      {
-      }
-      CODE;
+<?php
+/**
+ * Some description.
+ */
+class Foo
+{
+}
+CODE;
 
     $expected = <<<'CODE'
       <?php
