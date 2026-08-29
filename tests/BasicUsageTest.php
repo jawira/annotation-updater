@@ -240,7 +240,7 @@ final class BasicUsageTest extends CsTestCase
        * @author John Connor
        * @author Sarah Connor
        */
-      class Foo {};
+      class Foo {}
       PHP,
       <<<'PHP'
       <?php
@@ -248,7 +248,7 @@ final class BasicUsageTest extends CsTestCase
        * Class with multiple annotation.
        *
        */
-      class Foo {};
+      class Foo {}
       PHP,
       ['annotations' => [['tag' => 'author', 'mode' => 'remove']]],
     ];

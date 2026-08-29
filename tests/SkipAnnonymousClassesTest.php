@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+namespace Jawira\AnnotationUpdaterTests;
 
 use Jawira\AnnotationUpdater\AnnotationUpdater;
 use Jawira\AnnotationUpdaterTests\CsTestCase;
