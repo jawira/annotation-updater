@@ -89,6 +89,8 @@ class DocBlock
 
   /**
    * Count how many times a tag is present.
+   *
+   * @return non-negative-int
    */
   public function countTheTag(string $tag): int
   {
@@ -101,21 +103,6 @@ class DocBlock
     }
 
     return $count;
-  }
-
-  /**
-   * Tells the first line that contains the provided tag.
-   */
-  public function firstPositionForTheTag(string $tag): ?int
-  {
-    \strlen(\trim($tag)) !== 0 or throw new \InvalidArgumentException('Annotation cannot be empty string');
-    foreach (\array_values($this->lines) as $key => $line) {
-      if ($line->isTheTag($tag)) {
-        return $key;
-      }
-    }
-
-    return null;
   }
 
   public function lastPositionForTheTag(string $tag): ?int
@@ -159,5 +146,10 @@ class DocBlock
   public function pushLine(Line $line): void
   {
     \array_push($this->lines, $line);
+  }
+
+  public function insertLine(Line $line, int $position): void
+  {
+    \array_splice($this->lines, $position, 0, [$line]);
   }
 }

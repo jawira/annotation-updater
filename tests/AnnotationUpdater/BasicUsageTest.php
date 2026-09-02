@@ -139,7 +139,6 @@ final class BasicUsageTest extends CsTestCase
       <?php
       /**
        * Some description.
-       *
        * @copyright 2026 Skynet
        */
       class Foo
