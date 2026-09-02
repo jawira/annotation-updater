@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Jawira\AnnotationUpdaterTests;
+namespace Jawira\AnnotationUpdaterTests\AnnotationUpdater;
 
 use Jawira\AnnotationUpdater\AnnotationUpdater;
+use Jawira\AnnotationUpdaterTests\CsTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -23,6 +24,29 @@ final class BasicUsageTest extends CsTestCase
       <?php
       /**
        * Some description.
+       */
+      class Foo
+      {
+      }
+      PHP,
+      <<<'PHP'
+      <?php
+      /**
+       * Some description.
+       * @copyright 2026 Skynet
+       */
+      class Foo
+      {
+      }
+      PHP,
+      ['annotations' => [['tag' => 'copyright', 'value' => '2026 Skynet', 'mode' => 'preserve']]],
+    ];
+
+    yield [
+      <<<'PHP'
+      <?php
+      /**
+       * Some description.
        *
        */
       class Foo
@@ -33,7 +57,6 @@ final class BasicUsageTest extends CsTestCase
       <?php
       /**
        * Some description.
-       *
        * @copyright 2026 Skynet
        */
       class Foo

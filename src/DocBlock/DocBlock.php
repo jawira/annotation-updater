@@ -2,6 +2,7 @@
 
 namespace Jawira\AnnotationUpdater\DocBlock;
 
+use Jawira\AnnotationUpdater\RenderHelper;
 use function count;
 
 /**
@@ -29,7 +30,7 @@ class DocBlock
 
   public function __construct(string $content)
   {
-    $lines = \preg_split('~\R~', $content);
+    $lines = RenderHelper::split($content);
     is_array($lines) or throw new \InvalidArgumentException('Not a valid DocBlock');
     $this->lines = array_map(fn(string $l): Line => new Line($l), $lines);
     $this->originallySingleLine = 1 === count($this->lines);
@@ -64,8 +65,7 @@ class DocBlock
         $parts[] = match (true) {
           $line->isClosing && $line->isIndented => $line->indent . $line->content . self::CLOSING,
           $line->isClosing => $line->content . self::CLOSING,
-          $line->isIndented => $line->indent . $line->content . self::EOL . self::CLOSING,
-          default => self::INDENT . $line->content . self::CLOSING,
+          default => $line->indent . $line->content . self::EOL . ' ' . self::CLOSING,
         };
         continue;
       }
@@ -134,7 +134,7 @@ class DocBlock
   /**
    * Remove the provided tag starting by the end.
    */
-  public function deleteLastTag(string $tag): void
+  public function removeLastTag(string $tag): void
   {
     $position = $this->lastPositionForTheTag($tag);
     if ($position === null) {
@@ -144,5 +144,20 @@ class DocBlock
       unset($this->lines[$position]);
       $this->lines = \array_values($this->lines);
     } while (array_key_exists($position, $this->lines) && !$this->lines[$position]->isATag());
+  }
+
+  public function removeTrailingBlankLines(): void
+  {
+    while ($lastLine = end($this->lines)) {
+      if (!$lastLine->isBlankLine()) {
+        break;
+      }
+      \array_pop($this->lines);
+    }
+  }
+
+  public function pushLine(Line $line): void
+  {
+    \array_push($this->lines, $line);
   }
 }

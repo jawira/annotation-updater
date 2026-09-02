@@ -6,6 +6,7 @@ use Jawira\AnnotationUpdater\Actions\Action;
 use Jawira\AnnotationUpdater\Actions\Preserve;
 use Jawira\AnnotationUpdater\Actions\Remove;
 use Jawira\AnnotationUpdater\Actions\Replace;
+use Jawira\AnnotationUpdater\DocBlock\DocBlock;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
@@ -15,13 +16,13 @@ use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
+use PhpCsFixer\Tokenizer\TokensAnalyzer;
 use SplFileInfo;
-use function array_slice;
-use function count;
-use function preg_split;
 
 /**
  * Custom rule to update PHPDoc annotations.
+ *
+ * @see \PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer
  *
  * @implements ConfigurableFixerInterface<array<string, mixed>, array<string, mixed>>
  */
@@ -49,6 +50,14 @@ final class AnnotationUpdater extends AbstractFixer implements ConfigurableFixer
   public function getName(): string
   {
     return self::NAME;
+  }
+
+  /**
+   * Using the same priority as {@see \PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer}.
+   */
+  public function getPriority(): int
+  {
+    return 10;
   }
 
   /**
@@ -92,10 +101,10 @@ final class AnnotationUpdater extends AbstractFixer implements ConfigurableFixer
     }
 
     // Resolving configuration
-    $configuration = $this->getConfigurationDefinition()->resolve($configuration);
+    $this->configuration = $this->getConfigurationDefinition()->resolve($configuration);
 
     // Mapping to "Annotation" objects
-    foreach ($configuration[self::ANNOTATIONS] as $configItem) {
+    foreach ($this->configuration[self::ANNOTATIONS] as $configItem) {
       $annotation = match ($configItem['mode']) {
         Preserve::MODE => new Preserve(... $configItem),
         Replace::MODE => new Replace(... $configItem),
@@ -118,53 +127,37 @@ final class AnnotationUpdater extends AbstractFixer implements ConfigurableFixer
       return;
     }
 
-    for ($index = 0, $count = $tokens->count(); $index < $count; ++$index) {
+    $tokensAnalyzer = new TokensAnalyzer($tokens);
+    for ($index = $tokens->count() - 1; $index >= 0; --$index) {
       $token = $tokens[$index];
 
-      if (!$token->isGivenKind([\T_CLASS, \T_INTERFACE, \T_TRAIT, \T_ENUM])) {
+      if (!$token->isClassy()) {
         continue;
       }
 
-      if (RenderHelper::isAnonymousClass($tokens)) {
+      if ($tokensAnalyzer->isAnonymousClass($index)) {
         continue;
       }
 
-      $docBlockIndex = RenderHelper::findDocCommentIndex($tokens, $index);
-      if (null === $docBlockIndex) {
-        // At least one Action must need a DocBlock to work properly
+      $docBlockIndex = $tokens->getTokenNotOfKindsSibling($index, -1, [\T_WHITESPACE, \T_COMMENT]);
+      if (!is_int($docBlockIndex) || !$tokens[$docBlockIndex]->isGivenKind(\T_DOC_COMMENT)) {
         $docblockIsNeeded = array_reduce($this->actions, fn(bool $c, Action $a): bool => $c || $a->needsDocblock(), false);
         if (!$docblockIsNeeded) {
           continue;
         }
-        // Create new docblock
-        $newDocComment = RenderHelper::rebuildDocComment([]);
-        $tokens->insertAt($index, [new Token([\T_DOC_COMMENT, $newDocComment]), new Token([\T_WHITESPACE, "\n"])]);
-        $count = $tokens->count();
-        ++$index;
-        continue;
+        $tokens->insertAt($index, new Token([\T_DOC_COMMENT, DocBlock::OPENING . DocBlock::EOL . ' ' . DocBlock::CLOSING]));
       }
+      $index = $docBlockIndex;
+      is_int($index) or throw new \Exception("Invalid docblock index '{$docBlockIndex}'"); // Make PHPStan happy!
+      unset($docBlockIndex);
 
-      $docComment = $tokens[$docBlockIndex]->getContent();
-      $updatedDocComment = $this->applyNewAnnotations($docComment);
-
-      if ($updatedDocComment !== $docComment) {
-        $tokens[$docBlockIndex] = new Token([\T_DOC_COMMENT, $updatedDocComment]);
+      foreach ($this->actions as $action) {
+        $oldContent = $tokens[$index]->getContent();
+        $newContent = $action->apply(new DocBlock($oldContent))->getContent();
+        if ($oldContent !== $newContent) {
+          $tokens[$index] = new Token([\T_DOC_COMMENT, $newContent]);
+        }
       }
     }
-  }
-
-  /**
-   * Applies all configured annotations to a doc comment.
-   */
-  private function applyNewAnnotations(string $docComment): string
-  {
-    $lines = preg_split('/\R/', $docComment) ?: [$docComment];
-    $contentLines = array_slice($lines, 1, max(0, count($lines) - 2));
-
-    foreach ($this->actions as $action) {
-      $contentLines = $action->apply($contentLines);
-    }
-
-    return RenderHelper::rebuildDocComment($contentLines);
   }
 }

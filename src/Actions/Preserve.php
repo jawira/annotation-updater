@@ -2,6 +2,9 @@
 
 namespace Jawira\AnnotationUpdater\Actions;
 
+
+use Jawira\AnnotationUpdater\DocBlock\DocBlock;
+
 /**
  * Do not modify annotation if it's already present.
  */
@@ -16,18 +19,15 @@ final class Preserve extends Action
     $mode === self::MODE or throw new \InvalidArgumentException("Invalid mode '$mode'");
   }
 
-  /**
-   * @param array<int, string> $contentLines
-   * @return array<int, string>
-   */
-  public function apply(array $contentLines): array
+  public function apply(DocBlock $docBlock): DocBlock
   {
-    if ([] !== $this->findTagLines($contentLines)) {
-      return $contentLines;
+    if ($docBlock->countTheTag($this->tag) !== 0) {
+      return $docBlock;
     }
+    $docBlock->removeTrailingBlankLines();
+    $line = $this->forgeLine();
+    $docBlock->pushLine($line);
 
-    $contentLines[] = $this->renderTagLine();
-
-    return $contentLines;
+    return $docBlock;
   }
 }

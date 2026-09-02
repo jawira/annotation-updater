@@ -120,15 +120,15 @@ class LineTest extends TestCase
     ];
   }
 
-  #[DataProvider('isWhiteSpaceProvider')]
-  public function testIsWhiteSpace(string $input, bool $expected): void
+  #[DataProvider('isBlankLineProvider')]
+  public function testIsBlankLine(string $input, bool $expected): void
   {
     $line = new Line($input);
-    $actual = $line->isWhiteSpace();
+    $actual = $line->isBlankLine();
     $this->assertSame($expected, $actual);
   }
 
-  public static function isWhiteSpaceProvider()
+  public static function isBlankLineProvider()
   {
     return [
       ['/**', true],

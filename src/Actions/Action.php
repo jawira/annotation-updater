@@ -2,7 +2,9 @@
 
 namespace Jawira\AnnotationUpdater\Actions;
 
-use Jawira\AnnotationUpdater\RenderHelper;
+
+use Jawira\AnnotationUpdater\DocBlock\DocBlock;
+use Jawira\AnnotationUpdater\DocBlock\Line;
 
 /**
  * Abstract Action.
@@ -19,34 +21,7 @@ abstract class Action
    * @param array<int, string> $contentLines
    * @return array<int, string>
    */
-  abstract public function apply(array $contentLines): array;
-
-  public function renderTagLine(): string
-  {
-    $prefix = ' * @';
-    if (empty(trim($this->value))) {
-      return "$prefix{$this->tag}";
-    }
-
-    return "$prefix{$this->tag} {$this->value}";
-  }
-
-  /**
-   * @param array<int, string> $contentLines
-   * @return list<int>
-   */
-  protected function findTagLines(array $contentLines): array
-  {
-    $tagLines = [];
-
-    foreach ($contentLines as $index => $line) {
-      if (RenderHelper::matchesTag($line, $this)) {
-        $tagLines[] = $index;
-      }
-    }
-
-    return $tagLines;
-  }
+  abstract public function apply(DocBlock $docBlock): DocBlock;
 
   /**
    * Tells if this action should create a docblock when one doesn't exist.
@@ -54,5 +29,10 @@ abstract class Action
   public function needsDocblock(): bool
   {
     return true;
+  }
+
+  public function forgeLine(): Line
+  {
+    return new Line(DocBlock::INDENT . ' @' . $this->tag . ' ' . $this->value);
   }
 }

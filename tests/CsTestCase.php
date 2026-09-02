@@ -9,11 +9,11 @@ use SplFileInfo;
 
 abstract class CsTestCase extends TestCase
 {
-  protected AnnotationUpdater $fixer;
+  protected AnnotationUpdater $annotationUpdater;
 
   protected function setUp(): void
   {
-    $this->fixer = new AnnotationUpdater();
+    $this->annotationUpdater = new AnnotationUpdater();
   }
 
   /**
@@ -21,9 +21,9 @@ abstract class CsTestCase extends TestCase
    */
   public function generateCode(string $code, array $config): string
   {
-    $this->fixer->configure($config);
+    $this->annotationUpdater->configure($config);
     $tokens = Tokens::fromCode($code);
-    $this->fixer->fix(new SplFileInfo(__FILE__), $tokens);
+    $this->annotationUpdater->fix(new SplFileInfo(__FILE__), $tokens);
 
     return $tokens->generateCode();
   }

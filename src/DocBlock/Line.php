@@ -36,7 +36,7 @@ class Line
   /**
    * Is composed of whitespace characters, or is empty string.
    */
-  public function isWhiteSpace(): bool
+  public function isBlankLine(): bool
   {
     return 1 === \preg_match('~^\s*$~', $this->content);
   }
