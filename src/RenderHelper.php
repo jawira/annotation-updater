@@ -13,6 +13,61 @@ use PhpCsFixer\Tokenizer\Tokens;
 class RenderHelper
 {
 
+
+  static public function hasDocBlock(Tokens $tokens, int $index): bool
+  {
+    $docBlockIndex = self::findDocBlock($tokens, $index);
+
+    return is_int($docBlockIndex);
+  }
+
+  /**
+   * Get the closest DocBlock for a Class.
+   */
+  static public function findDocBlock(Tokens $tokens, int $index): ?int
+  {
+    if (!$tokens[$index]->isClassy()) {
+      return null;
+    }
+
+    $docBlockIndex = $tokens->getTokenNotOfKindsSibling($index, -1, [\T_WHITESPACE, \T_COMMENT, \T_FINAL, \T_READONLY, \T_ABSTRACT]);
+    if (!is_int($docBlockIndex)) {
+      return null;
+    }
+
+    $isDocBlock = $tokens[$docBlockIndex]->isGivenKind(\T_DOC_COMMENT);
+
+    return $isDocBlock ? $docBlockIndex : null;
+  }
+
+  /**
+   * Find class start.
+   *
+   * This is ideal to know where to insert a DocBlock when you are sure your
+   * class doesn't have one.
+   *
+   * Returns null if provided index is not classy.
+   */
+  static public function findClassStart(Tokens $tokens, int $index): ?int
+  {
+    if (!$tokens[$index]->isClassy()) {
+      return null;
+    }
+
+    $start = $index;
+    while (--$index >= 0) {
+      if ($tokens[$index]->isGivenKind(\T_WHITESPACE)) {
+        continue;
+      }
+      if (!$tokens[$index]->isGivenKind([\T_DOC_COMMENT, \T_FINAL, \T_READONLY, \T_ABSTRACT])) {
+        break;
+      }
+      $start = $index;
+    }
+
+    return $start;
+  }
+
   /**
    * Reimplement using {@see \PhpCsFixer\Tokenizer\TokensAnalyzer::isAnonymousClass}.
    */

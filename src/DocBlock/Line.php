@@ -2,13 +2,13 @@
 
 namespace Jawira\AnnotationUpdater\DocBlock;
 
-class Line
+readonly class Line
 {
-  readonly public bool $isOpening;
-  readonly public bool $isIndented;
-  readonly public bool $isClosing;
-  readonly public string $indent;
-  readonly public string $content;
+  public bool $isOpening;
+  public bool $isIndented;
+  public bool $isClosing;
+  public string $indent;
+  public string $content;
 
   public function __construct(string $content)
   {
@@ -20,6 +20,7 @@ class Line
     $this->isOpening = \str_starts_with($content, DocBlock::OPENING);
     $this->isIndented = 1 === \preg_match('~^\s*\*~', $content, $matches);
     if ($this->isOpening) {
+      $this->indent = '';
       $content = substr($content, \strlen(DocBlock::OPENING));
     } elseif ($this->isIndented) {
       $match = \reset($matches);
