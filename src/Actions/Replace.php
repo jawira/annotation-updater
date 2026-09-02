@@ -2,6 +2,7 @@
 
 namespace Jawira\AnnotationUpdater\Actions;
 
+use Jawira\AnnotationUpdater\DocBlock\DocBlock;
 use function array_splice;
 use function in_array;
 
@@ -19,31 +20,25 @@ final class Replace extends Action
     $mode === self::MODE or throw new \InvalidArgumentException("Invalid mode '$mode'");
   }
 
-  /**
-   * @param array<int, string> $contentLines
-   * @return array<int, string>
-   */
-  public function apply(array $contentLines): array
+  public function apply(DocBlock $docBlock): DocBlock
   {
-    $tagLines = $this->findTagLines($contentLines);
-
-    if ([] === $tagLines) {
-      $contentLines[] = $this->renderTagLine();
-
-      return $contentLines;
+    while ($docBlock->countTheTag($this->tag) > 1) {
+      $docBlock->removeLastTag($this->tag);
     }
 
-    $firstTagIndex = $tagLines[0];
-    $filteredContentLines = [];
-    foreach ($contentLines as $index => $line) {
-      if (in_array($index, $tagLines, true)) {
-        continue;
-      }
-      $filteredContentLines[] = $line;
+    // Tag was never present
+    if ($docBlock->countTheTag($this->tag) === 0) {
+      $docBlock->removeTrailingBlankLines();
+      $docBlock->pushLine($this->forgeLines());
+
+      return $docBlock;
     }
 
-    array_splice($filteredContentLines, $firstTagIndex, 0, [$this->renderTagLine()]);
+    // Replace the last tag remaining
+    $position = $docBlock->lastPositionForTheTag($this->tag);
+    $docBlock->removeLastTag($this->tag);
+    $docBlock->insertLines($this->forgeLines(), $position);
 
-    return $filteredContentLines;
+    return $docBlock;
   }
 }

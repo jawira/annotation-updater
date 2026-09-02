@@ -2,7 +2,8 @@
 
 namespace Jawira\AnnotationUpdater\Actions;
 
-use Jawira\AnnotationUpdater\RenderHelper;
+
+use Jawira\AnnotationUpdater\DocBlock\DocBlock;
 
 /**
  * Remove annotation.
@@ -24,12 +25,13 @@ final class Remove extends Action
    * @param array<int, string> $contentLines
    * @return array<int, string>
    */
-  public function apply(array $contentLines): array
+  public function apply(DocBlock $docBlock): DocBlock
   {
-    return array_values(array_filter(
-      $contentLines,
-      fn(string $line): bool => !RenderHelper::matchesTag($line, $this),
-    ));
+    while ($docBlock->countTheTag($this->tag) > 0) {
+      $docBlock->removeLastTag($this->tag);
+    }
+
+    return $docBlock;
   }
 
   /**

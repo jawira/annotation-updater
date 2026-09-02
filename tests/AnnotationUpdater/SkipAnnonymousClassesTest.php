@@ -1,13 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Jawira\AnnotationUpdaterTests;
+namespace Jawira\AnnotationUpdaterTests\AnnotationUpdater;
 
 use Jawira\AnnotationUpdater\AnnotationUpdater;
 use Jawira\AnnotationUpdaterTests\CsTestCase;
-use PhpCsFixer\Tokenizer\Tokens;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 
 
 #[CoversClass(AnnotationUpdater::class)]
