@@ -1,0 +1,330 @@
+<?php
+
+namespace Jawira\AnnotationUpdaterTests\AnnotationUpdater;
+
+use Jawira\AnnotationUpdaterTests\CsTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+
+class ClassModifiersTest extends CsTestCase
+{
+  private const FOO = <<<'PHP'
+    <?php
+    // test
+    readonly class Foo {
+    }
+    PHP;
+
+  private const BAR = <<<'PHP'
+    <?php
+    /**
+     * The Foo class.
+     *
+     * @author Jawira Portugal
+     */
+    abstract class Foo {
+        private $foo;
+    }
+    PHP;
+
+  private const BAZ = <<<'PHP'
+    <?php
+    /**
+     * @license MIT
+     * @copyright (c) Copyright 2026
+     */
+    readonly final class Baz {
+        protected string $baz;
+    }
+    PHP;
+
+  #[DataProvider('preserveProvider')]
+  public function testPreserve(string $code, string $expected, array $config): void
+  {
+    $actual = $this->generateCode($code, $config);
+    $this->assertSame($expected, $actual);
+  }
+
+  public static function preserveProvider(): iterable
+  {
+    yield [
+      self::FOO,
+      self::FOO,
+      ['annotations' => []],
+    ];
+
+    yield [
+      self::FOO,
+      <<<'PHP'
+        <?php
+        // test
+        /**
+         * @demo This is a demo
+         */
+        readonly class Foo {
+        }
+        PHP,
+      ['annotations' => [
+        ['tag' => 'demo', 'value' => 'This is a demo', 'mode' => 'preserve'],
+      ]],
+    ];
+
+    yield [
+      self::FOO,
+      <<<'PHP'
+        <?php
+        // test
+        /**
+         * @demo This is a demo
+         * @license MIT
+         */
+        readonly class Foo {
+        }
+        PHP,
+      ['annotations' => [
+        ['tag' => 'demo', 'value' => 'This is a demo', 'mode' => 'preserve'],
+        ['tag' => 'license', 'value' => 'MIT', 'mode' => 'preserve'],
+      ]],
+    ];
+
+    yield [
+      self::BAR,
+      <<<'PHP'
+        <?php
+        /**
+         * The Foo class.
+         *
+         * @author Jawira Portugal
+         */
+        abstract class Foo {
+            private $foo;
+        }
+        PHP,
+      ['annotations' => [
+        ['tag' => 'author', 'value' => 'Junior Jack', 'mode' => 'preserve'],
+      ]],
+    ];
+
+    yield [
+      self::BAZ,
+      <<<'PHP'
+        <?php
+        /**
+         * @license MIT
+         * @copyright (c) Copyright 2026
+         */
+        readonly final class Baz {
+            protected string $baz;
+        }
+        PHP,
+      ['annotations' => [
+        ['tag' => 'license', 'value' => 'proprietary', 'mode' => 'preserve'],
+      ]],
+    ];
+
+    yield [
+      self::BAZ,
+      <<<'PHP'
+        <?php
+        /**
+         * @license MIT
+         * @copyright (c) Copyright 2026
+         * @author Jawira
+         */
+        readonly final class Baz {
+            protected string $baz;
+        }
+        PHP,
+      ['annotations' => [
+        ['tag' => 'license', 'value' => 'proprietary', 'mode' => 'preserve'],
+        ['tag' => 'author', 'value' => 'Jawira', 'mode' => 'preserve'],
+      ]],
+    ];
+
+  }
+
+  #[DataProvider('replaceProvider')]
+  public function testReplace(string $code, string $expected, array $config): void
+  {
+    $actual = $this->generateCode($code, $config);
+    $this->assertSame($expected, $actual);
+  }
+
+  public static function replaceProvider(): iterable
+  {
+    yield [
+      self::FOO,
+      <<<'PHP'
+        <?php
+        // test
+        /**
+         * @demo This is a demo
+         */
+        readonly class Foo {
+        }
+        PHP,
+      ['annotations' => [
+        ['tag' => 'demo', 'value' => 'This is a demo', 'mode' => 'replace'],
+      ]],
+    ];
+
+    yield [
+      self::FOO,
+      <<<'PHP'
+        <?php
+        // test
+        /**
+         * @demo This is a demo
+         * @license MIT
+         */
+        readonly class Foo {
+        }
+        PHP,
+      ['annotations' => [
+        ['tag' => 'demo', 'value' => 'This is a demo', 'mode' => 'replace'],
+        ['tag' => 'license', 'value' => 'MIT', 'mode' => 'replace'],
+      ]],
+    ];
+
+    yield [
+      self::BAR,
+      <<<'PHP'
+        <?php
+        /**
+         * The Foo class.
+         *
+         * @author Junior Jack
+         */
+        abstract class Foo {
+            private $foo;
+        }
+        PHP,
+      ['annotations' => [
+        ['tag' => 'author', 'value' => 'Junior Jack', 'mode' => 'replace'],
+      ]],
+    ];
+
+    yield [
+      self::BAZ,
+      <<<'PHP'
+        <?php
+        /**
+         * @license proprietary
+         * @copyright (c) Copyright 2026
+         */
+        readonly final class Baz {
+            protected string $baz;
+        }
+        PHP,
+      ['annotations' => [
+        ['tag' => 'license', 'value' => 'proprietary', 'mode' => 'replace'],
+      ]],
+    ];
+
+    yield [
+      self::BAZ,
+      <<<'PHP'
+        <?php
+        /**
+         * @license proprietary
+         * @copyright (c) Copyright 2026
+         * @author Jawira
+         */
+        readonly final class Baz {
+            protected string $baz;
+        }
+        PHP,
+      ['annotations' => [
+        ['tag' => 'license', 'value' => 'proprietary', 'mode' => 'replace'],
+        ['tag' => 'author', 'value' => 'Jawira', 'mode' => 'replace'],
+      ]],
+    ];
+  }
+
+  #[DataProvider('removeProvider')]
+  public function testRemove(string $code, string $expected, array $config): void
+  {
+    $actual = $this->generateCode($code, $config);
+    $this->assertSame($expected, $actual);
+  }
+
+  public static function removeProvider(): iterable
+  {
+    yield [
+      self::FOO,
+      <<<'PHP'
+        <?php
+        // test
+        readonly class Foo {
+        }
+        PHP,
+      ['annotations' => [
+        ['tag' => 'demo', 'mode' => 'remove'],
+      ]],
+    ];
+
+    yield [
+      self::FOO,
+      <<<'PHP'
+        <?php
+        // test
+        readonly class Foo {
+        }
+        PHP,
+      ['annotations' => [
+        ['tag' => 'demo',  'mode' => 'remove'],
+        ['tag' => 'license', 'mode' => 'remove'],
+      ]],
+    ];
+
+    yield [
+      self::BAR,
+      <<<'PHP'
+        <?php
+        /**
+         * The Foo class.
+         *
+         */
+        abstract class Foo {
+            private $foo;
+        }
+        PHP,
+      ['annotations' => [
+        ['tag' => 'author', 'mode' => 'remove'],
+      ]],
+    ];
+
+    yield [
+      self::BAZ,
+      <<<'PHP'
+        <?php
+        /**
+         * @copyright (c) Copyright 2026
+         */
+        readonly final class Baz {
+            protected string $baz;
+        }
+        PHP,
+      ['annotations' => [
+        ['tag' => 'license', 'mode' => 'remove'],
+      ]],
+    ];
+
+    yield [
+      self::BAZ,
+      <<<'PHP'
+        <?php
+        /**
+         * @copyright (c) Copyright 2026
+         */
+        readonly final class Baz {
+            protected string $baz;
+        }
+        PHP,
+      ['annotations' => [
+        ['tag' => 'license', 'mode' => 'remove'],
+        ['tag' => 'author', 'mode' => 'remove'],
+      ]],
+    ];
+  }
+
+}

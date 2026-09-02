@@ -14,6 +14,7 @@ use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverInterface;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
+use PhpCsFixer\Tokenizer\FCT;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Tokenizer\TokensAnalyzer;
@@ -127,36 +128,29 @@ final class AnnotationUpdater extends AbstractFixer implements ConfigurableFixer
       return;
     }
 
-    $tokensAnalyzer = new TokensAnalyzer($tokens);
     for ($index = $tokens->count() - 1; $index >= 0; --$index) {
-      $token = $tokens[$index];
 
-      if (!$token->isClassy()) {
+      if (!$tokens[$index]->isClassy()) {
         continue;
       }
 
-      if ($tokensAnalyzer->isAnonymousClass($index)) {
+      if ((new TokensAnalyzer($tokens))->isAnonymousClass($index)) {
         continue;
       }
 
-      $docBlockIndex = $tokens->getTokenNotOfKindsSibling($index, -1, [\T_WHITESPACE, \T_COMMENT]);
-      if (!is_int($docBlockIndex) || !$tokens[$docBlockIndex]->isGivenKind(\T_DOC_COMMENT)) {
-        $docblockIsNeeded = array_reduce($this->actions, fn(bool $c, Action $a): bool => $c || $a->needsDocblock(), false);
-        if (!$docblockIsNeeded) {
+      if (!RenderHelper::hasDocBlock($tokens, $index)) {
+        if (!$this->isDocBlockNeeded()) {
           continue;
         }
-        $tokens->insertAt($index, new Token([\T_DOC_COMMENT, DocBlock::OPENING . DocBlock::EOL . ' ' . DocBlock::CLOSING]));
-        $index++;
-        $tokens->insertAt($index, new Token([\T_WHITESPACE, DocBlock::EOL]));
-        $index++;
-        $index++;
-
-        continue;
+        $startIndex = RenderHelper::findClassStart($tokens, $index);
+        is_int($startIndex) or throw new \Exception("Invalid docblock index '{$index}'"); // Make PHPStan happy!
+        $tokens->insertAt($startIndex, new Token([\T_DOC_COMMENT, DocBlock::OPENING . DocBlock::EOL . ' ' . DocBlock::CLOSING]));
+        $tokens->insertAt($startIndex + 1, new Token([\T_WHITESPACE, DocBlock::EOL]));
+        unset($startIndex);
+        $index += 2;
       }
-      $index = $docBlockIndex;
-      is_int($index) or throw new \Exception("Invalid docblock index '{$docBlockIndex}'"); // Make PHPStan happy!
-      unset($docBlockIndex);
 
+      $index = RenderHelper::findDocBlock($tokens, $index);
       foreach ($this->actions as $action) {
         $oldContent = $tokens[$index]->getContent();
         $newContent = $action->apply(new DocBlock($oldContent))->getContent();
@@ -165,5 +159,16 @@ final class AnnotationUpdater extends AbstractFixer implements ConfigurableFixer
         }
       }
     }
+  }
+
+  /**
+   * Tells if a DocBlock is needed.
+   *
+   * @example The class has no DocBlock and since you only have {@see Remove}
+   * actions, then creating a DocBlock is useless.
+   */
+  private function isDocBlockNeeded(): bool
+  {
+    return \array_any($this->actions, fn(Action $a): bool => $a->needsDocblock());
   }
 }
