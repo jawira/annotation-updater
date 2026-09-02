@@ -5,6 +5,7 @@ namespace Jawira\AnnotationUpdater\Actions;
 
 use Jawira\AnnotationUpdater\DocBlock\DocBlock;
 use Jawira\AnnotationUpdater\DocBlock\Line;
+use Jawira\AnnotationUpdater\RenderHelper;
 
 /**
  * Abstract Action.
@@ -31,8 +32,27 @@ abstract class Action
     return true;
   }
 
-  public function forgeLine(): Line
+  /**
+   * Convert current {@see \Jawira\AnnotationUpdater\Actions\Action} is {@see \Jawira\AnnotationUpdater\DocBlock\Line} objects.
+   *
+   * When "content" attribute is composed of multiple lines then multiple lines are returned.
+   *
+   * @return \Jawira\AnnotationUpdater\DocBlock\Line[]
+   */
+  public function forgeLines(): array
   {
-    return new Line(DocBlock::INDENT . ' @' . $this->tag . ' ' . $this->value);
+    $values = RenderHelper::split($this->value);
+    $lines = [];
+    foreach ($values as $key => $value) {
+      // First contains the tag.
+      if ($key === array_key_first($values)) {
+        $lines[] = new Line(DocBlock::INDENT . ' @' . $this->tag . ' ' . $value);
+        continue;
+      }
+      // Add DocBlock indentation.
+      $lines[] = new Line(DocBlock::INDENT . ' ' . $value);
+    }
+
+    return $lines;
   }
 }

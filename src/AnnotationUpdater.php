@@ -146,6 +146,12 @@ final class AnnotationUpdater extends AbstractFixer implements ConfigurableFixer
           continue;
         }
         $tokens->insertAt($index, new Token([\T_DOC_COMMENT, DocBlock::OPENING . DocBlock::EOL . ' ' . DocBlock::CLOSING]));
+        $index++;
+        $tokens->insertAt($index, new Token([\T_WHITESPACE, DocBlock::EOL]));
+        $index++;
+        $index++;
+
+        continue;
       }
       $index = $docBlockIndex;
       is_int($index) or throw new \Exception("Invalid docblock index '{$docBlockIndex}'"); // Make PHPStan happy!

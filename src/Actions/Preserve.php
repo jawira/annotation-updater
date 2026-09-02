@@ -25,8 +25,7 @@ final class Preserve extends Action
       return $docBlock;
     }
     $docBlock->removeTrailingBlankLines();
-    $line = $this->forgeLine();
-    $docBlock->pushLine($line);
+    $docBlock->pushLine($this->forgeLines());
 
     return $docBlock;
   }

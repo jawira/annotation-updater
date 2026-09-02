@@ -28,10 +28,8 @@ final class Replace extends Action
 
     // Tag was never present
     if ($docBlock->countTheTag($this->tag) === 0) {
-
       $docBlock->removeTrailingBlankLines();
-      $line = $this->forgeLine();
-      $docBlock->pushLine($line);
+      $docBlock->pushLine($this->forgeLines());
 
       return $docBlock;
     }
@@ -39,8 +37,7 @@ final class Replace extends Action
     // Replace the last tag remaining
     $position = $docBlock->lastPositionForTheTag($this->tag);
     $docBlock->removeLastTag($this->tag);
-    $docBlock->insertLine($this->forgeLine(), $position);
-
+    $docBlock->insertLines($this->forgeLines(), $position);
 
     return $docBlock;
   }

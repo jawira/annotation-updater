@@ -43,6 +43,10 @@ class DocBlock
 
   /**
    * Return MultiLine content.
+   *
+   * This method is specially long since I am trying to keep the "ugliness" of a PHPDoc.
+   * By "ugliness" I refer to malformed DocBlock, with a tag in the first line, wrong indentation, etc.
+   * Use other PHP-CS-fixer rules to "beautify" a DocBlock.
    */
   private function getMultiLineContent(): string
   {
@@ -50,6 +54,7 @@ class DocBlock
     $lines = array_values($this->lines);
     $firstKey = \array_key_first($lines);
     $lastKey = \array_key_last($lines);
+
     foreach ($lines as $key => $line) {
 
       if ($key === $firstKey) {
@@ -73,7 +78,15 @@ class DocBlock
       $parts[] = $line->isIndented ? $line->indent . $line->content : $line->content;
     }
 
-    return implode(self::EOL, $parts);
+    $content = implode(self::EOL, $parts);
+
+    // If the last line has been removed then it's possible to
+    // have a DocBlock without closing string. Let's fix this.
+    if (!str_ends_with($content, self::CLOSING)) {
+      $content .= self::EOL . ' ' . self::CLOSING;
+    }
+
+    return $content;
   }
 
   /**
@@ -143,13 +156,21 @@ class DocBlock
     }
   }
 
-  public function pushLine(Line $line): void
+  /**
+   * Add lines at the end of DocBlock.
+   *
+   * @param \Jawira\AnnotationUpdater\DocBlock\Line[] $lines
+   */
+  public function pushLine(array $lines): void
   {
-    \array_push($this->lines, $line);
+    $this->insertLines($lines, count($this->lines));
   }
 
-  public function insertLine(Line $line, int $position): void
+  /**
+   * @param \Jawira\AnnotationUpdater\DocBlock\Line[] $lines
+   */
+  public function insertLines(array $lines, int $position): void
   {
-    \array_splice($this->lines, $position, 0, [$line]);
+    \array_splice($this->lines, $position, 0, $lines);
   }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Jawira\AnnotationUpdaterTests;
+namespace Jawira\AnnotationUpdaterTests\AnnotationUpdater;
 
 use Jawira\AnnotationUpdaterTests\CsTestCase;
 
@@ -23,7 +23,6 @@ class OpenTagTest extends CsTestCase
       <?php
       /**
        * The Bar class.
-       *
        * @copyright 2026 Skynet
        */
       class Bar

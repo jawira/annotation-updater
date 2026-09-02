@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Jawira\AnnotationUpdaterTests;
+namespace Jawira\AnnotationUpdaterTests\AnnotationUpdater;
 
 use Jawira\AnnotationUpdater\AnnotationUpdater;
 use PHPUnit\Framework\Attributes\CoversClass;
