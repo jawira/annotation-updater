@@ -1,6 +1,6 @@
 <?php
 
-namespace Jawira\AnnotationUpdaterTests\AnnotationUpdater;
+namespace AnnotationUpdater;
 
 use Jawira\AnnotationUpdater\AnnotationUpdater;
 use Jawira\AnnotationUpdaterTests\CsTestCase;
@@ -8,11 +8,12 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 #[CoversClass(AnnotationUpdater::class)]
-class ClassModifiersTest extends CsTestCase
+class AttributesTest extends CsTestCase
 {
   private const FOO = <<<'PHP'
     <?php
     // test
+    #[\FooAttribute]
     readonly class Foo {
     }
     PHP;
@@ -20,17 +21,21 @@ class ClassModifiersTest extends CsTestCase
   private const BAR = <<<'PHP'
     <?php
     /**
-     * The Foo class.
+     * The Bar class.
      *
      * @author Jawira Portugal
      */
-    abstract class Foo {
-        private $foo;
+    #[\MyBarAttribute]
+    #[\AnyBarAttribute]
+    abstract class Bar {
+        private $bar;
     }
     PHP;
 
   private const BAZ = <<<'PHP'
     <?php
+    #[\BazAttribute]
+    #[\AnotherBazAttribute]
     /**
      * @license MIT
      * @copyright (c) Copyright 2026
@@ -63,6 +68,7 @@ class ClassModifiersTest extends CsTestCase
         /**
          * @demo This is a demo
          */
+        #[\FooAttribute]
         readonly class Foo {
         }
         PHP,
@@ -80,6 +86,7 @@ class ClassModifiersTest extends CsTestCase
          * @demo This is a demo
          * @license MIT
          */
+        #[\FooAttribute]
         readonly class Foo {
         }
         PHP,
@@ -94,12 +101,14 @@ class ClassModifiersTest extends CsTestCase
       <<<'PHP'
         <?php
         /**
-         * The Foo class.
+         * The Bar class.
          *
          * @author Jawira Portugal
          */
-        abstract class Foo {
-            private $foo;
+        #[\MyBarAttribute]
+        #[\AnyBarAttribute]
+        abstract class Bar {
+            private $bar;
         }
         PHP,
       ['annotations' => [
@@ -111,6 +120,8 @@ class ClassModifiersTest extends CsTestCase
       self::BAZ,
       <<<'PHP'
         <?php
+        #[\BazAttribute]
+        #[\AnotherBazAttribute]
         /**
          * @license MIT
          * @copyright (c) Copyright 2026
@@ -128,6 +139,8 @@ class ClassModifiersTest extends CsTestCase
       self::BAZ,
       <<<'PHP'
         <?php
+        #[\BazAttribute]
+        #[\AnotherBazAttribute]
         /**
          * @license MIT
          * @copyright (c) Copyright 2026
@@ -162,6 +175,7 @@ class ClassModifiersTest extends CsTestCase
         /**
          * @demo This is a demo
          */
+        #[\FooAttribute]
         readonly class Foo {
         }
         PHP,
@@ -179,6 +193,7 @@ class ClassModifiersTest extends CsTestCase
          * @demo This is a demo
          * @license MIT
          */
+        #[\FooAttribute]
         readonly class Foo {
         }
         PHP,
@@ -193,12 +208,14 @@ class ClassModifiersTest extends CsTestCase
       <<<'PHP'
         <?php
         /**
-         * The Foo class.
+         * The Bar class.
          *
          * @author Junior Jack
          */
-        abstract class Foo {
-            private $foo;
+        #[\MyBarAttribute]
+        #[\AnyBarAttribute]
+        abstract class Bar {
+            private $bar;
         }
         PHP,
       ['annotations' => [
@@ -210,6 +227,8 @@ class ClassModifiersTest extends CsTestCase
       self::BAZ,
       <<<'PHP'
         <?php
+        #[\BazAttribute]
+        #[\AnotherBazAttribute]
         /**
          * @license proprietary
          * @copyright (c) Copyright 2026
@@ -227,6 +246,8 @@ class ClassModifiersTest extends CsTestCase
       self::BAZ,
       <<<'PHP'
         <?php
+        #[\BazAttribute]
+        #[\AnotherBazAttribute]
         /**
          * @license proprietary
          * @copyright (c) Copyright 2026
@@ -257,6 +278,7 @@ class ClassModifiersTest extends CsTestCase
       <<<'PHP'
         <?php
         // test
+        #[\FooAttribute]
         readonly class Foo {
         }
         PHP,
@@ -270,6 +292,7 @@ class ClassModifiersTest extends CsTestCase
       <<<'PHP'
         <?php
         // test
+        #[\FooAttribute]
         readonly class Foo {
         }
         PHP,
@@ -284,11 +307,13 @@ class ClassModifiersTest extends CsTestCase
       <<<'PHP'
         <?php
         /**
-         * The Foo class.
+         * The Bar class.
          *
          */
-        abstract class Foo {
-            private $foo;
+        #[\MyBarAttribute]
+        #[\AnyBarAttribute]
+        abstract class Bar {
+            private $bar;
         }
         PHP,
       ['annotations' => [
@@ -300,6 +325,8 @@ class ClassModifiersTest extends CsTestCase
       self::BAZ,
       <<<'PHP'
         <?php
+        #[\BazAttribute]
+        #[\AnotherBazAttribute]
         /**
          * @copyright (c) Copyright 2026
          */
@@ -316,6 +343,8 @@ class ClassModifiersTest extends CsTestCase
       self::BAZ,
       <<<'PHP'
         <?php
+        #[\BazAttribute]
+        #[\AnotherBazAttribute]
         /**
          * @copyright (c) Copyright 2026
          */
