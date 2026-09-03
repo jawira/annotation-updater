@@ -14,7 +14,6 @@ use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverInterface;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
-use PhpCsFixer\Tokenizer\FCT;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Tokenizer\TokensAnalyzer;
@@ -31,11 +30,11 @@ final class AnnotationUpdater extends AbstractFixer implements ConfigurableFixer
 {
   public const ANNOTATIONS = 'annotations';
   public const NAME = 'Jawira/annotation_updater';
-
   /**
    * @var \Jawira\AnnotationUpdater\Actions\Action[]
    */
   private array $actions = [];
+  public array $configuration;
 
   /**
    * Returns the fixer definition with description and code samples.
@@ -58,7 +57,7 @@ final class AnnotationUpdater extends AbstractFixer implements ConfigurableFixer
    */
   public function getPriority(): int
   {
-    return 10;
+    return 0;
   }
 
   /**
@@ -142,7 +141,7 @@ final class AnnotationUpdater extends AbstractFixer implements ConfigurableFixer
         if (!$this->isDocBlockNeeded()) {
           continue;
         }
-        $startIndex = RenderHelper::findClassStart($tokens, $index);
+        $startIndex = RenderHelper::findDocBlock($tokens, $index);
         is_int($startIndex) or throw new \Exception("Invalid docblock index '{$index}'"); // Make PHPStan happy!
         $tokens->insertAt($startIndex, new Token([\T_DOC_COMMENT, DocBlock::OPENING . DocBlock::EOL . ' ' . DocBlock::CLOSING]));
         $tokens->insertAt($startIndex + 1, new Token([\T_WHITESPACE, DocBlock::EOL]));
