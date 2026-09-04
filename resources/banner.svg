@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="173.22887mm"
+   height="32.151577mm"
+   viewBox="0 0 173.22887 32.151577"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
+   sodipodi:docname="banner.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="2.0863777"
+     inkscape:cx="268.16813"
+     inkscape:cy="7.9084436"
+     inkscape:window-width="2560"
+     inkscape:window-height="1403"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="linearGradient7"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#2b2d42;stop-opacity:0.84297192;"
+         offset="0"
+         id="stop8" />
+      <stop
+         style="stop-color:#2b2d42;stop-opacity:1;"
+         offset="0.5"
+         id="stop9" />
+      <stop
+         style="stop-color:#202131;stop-opacity:1;"
+         offset="1"
+         id="stop7" />
+    </linearGradient>
+    <rect
+       x="208.77226"
+       y="602.59265"
+       width="578.16382"
+       height="85.03302"
+       id="rect4" />
+    <rect
+       x="142.83128"
+       y="280.86957"
+       width="224.31223"
+       height="43.136967"
+       id="rect3" />
+    <rect
+       x="142.83128"
+       y="280.86957"
+       width="144.26918"
+       height="44.095562"
+       id="rect3-6" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7"
+       id="linearGradient8"
+       x1="73.40567"
+       y1="76.244934"
+       x2="138.29834"
+       y2="236.85994"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-0.85202832,-8.052419)" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-18.385567,-132.42421)">
+    <rect
+       style="fill:url(#linearGradient8);stroke-width:7.05068;stroke-linejoin:round;stroke-opacity:0.5;paint-order:stroke fill markers"
+       id="rect1"
+       width="173.22887"
+       height="32.151577"
+       x="18.385567"
+       y="132.42421" />
+    <g
+       id="g10"
+       transform="translate(-2.9456543e-8,-8.3326036)">
+      <g
+         id="g9"
+         transform="translate(-0.61834564)">
+        <text
+           xml:space="preserve"
+           transform="matrix(0.26458333,0,0,0.26458333,24.235897,73.866845)"
+           id="text2"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:32px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect3);display:inline;fill:#ffffff;fill-opacity:1;stroke-width:37.7953;stroke-linejoin:round;stroke-opacity:0.5;paint-order:stroke fill markers"><tspan
+             x="142.83203"
+             y="308.92943"
+             id="tspan2">Annotation</tspan></text>
+        <text
+           xml:space="preserve"
+           transform="matrix(0.26458333,0,0,0.26458333,76.464907,73.865457)"
+           id="text2-2"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:32px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect3-6);display:inline;fill:#f7ec59;fill-opacity:1;stroke-width:37.7953;stroke-linejoin:round;stroke-opacity:0.5;paint-order:stroke fill markers"><tspan
+             x="142.83203"
+             y="308.92943"
+             id="tspan3">Updater</tspan></text>
+      </g>
+      <text
+         xml:space="preserve"
+         transform="matrix(0.24775662,0,0,0.24775662,-7.4933426,9.0364828)"
+         id="text4"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.3583px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect4);display:inline;fill:#f9f9f9;fill-opacity:1;stroke-width:37.7953;stroke-linejoin:round;stroke-opacity:0.5;paint-order:stroke fill markers"><tspan
+           x="208.77148"
+           y="621.83038"
+           id="tspan5">Custom PHP-CS-Fixer rule to update PHPDoc tags.</tspan></text>
+    </g>
+  </g>
+</svg>
