@@ -66,7 +66,7 @@ class Example{
 The fixer accepts a single configuration key: `annotations`. This is an array of
 annotation rules to apply.
 
-Each rule is an array with the following structure:
+Each rule is an array with the following structure.
 
 - `tag`: The PHPDoc tag name without the `@`.
 - `value`: The value of the tad. Do not set this key for `remove` mode!
@@ -86,7 +86,7 @@ Example:
 
 The fixer has three different modes.
 
-1. `preserve`: Do not replace the tasg if it's already present.
+1. `preserve`: Do not replace the tags if it's already present.
 2. `replace`: Always replace the tag.
 3. `remove`: Remove the tag.
 
@@ -100,20 +100,21 @@ The `mode` behavior is summarized in the following table.
 
 ## Contributing
 
-- If you liked this project, ⭐ star it on GitHub.
+- If you liked this project,
+  ⭐ [star it on GitHub](https://github.com/jawira/annotation-updater).
 - Or follow me on 𝕏.
   [![𝕏 Follow](https://img.shields.io/twitter/follow/jawira?style=social)](https://x.com/jawira)
 - Found a bug? Please report it by opening an issue!
 
 ## License
 
-This library is licensed under the [MIT license](LICENSE.md).
+This library is licensed under the [MIT license](./LICENSE.md).
 
 ## Disclaimer
 
 * Yes, I know `Annotations` are not the same as `PHPDoc tags`, but when I
-  realized this it was too late. Properly speaking, this library is supposed to
-  update `PHPDoc tags` and not `Annotations`.
+  realized this it was too late. Properly speaking, this library updates
+  `PHPDoc tags` and not `Annotations`.
 * This project is inspired by `konradmichalik/php-doc-block-header-fixer`.
 
 ***

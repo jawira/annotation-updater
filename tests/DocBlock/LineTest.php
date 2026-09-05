@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Jawira\AnnotationUpdaterTests\DocBlock;
 
@@ -7,10 +7,15 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ *
+ * @author Jawira Portugal <dev@tugal.be>
+ * @copyright © 2026 Jawira Portugal
+ */
 #[CoversClass(Line::class)]
 class LineTest extends TestCase
 {
-
   #[DataProvider('isATagProvider')]
   public function testIsATag(string $input, bool $expected): void
   {
@@ -186,5 +191,4 @@ class LineTest extends TestCase
       ['Some content */', false],
     ];
   }
-
 }

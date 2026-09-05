@@ -2,14 +2,32 @@
 
 namespace Jawira\AnnotationUpdaterTests\AnnotationUpdater;
 
+use Jawira\AnnotationUpdater\Actions\Action;
+use Jawira\AnnotationUpdater\Actions\Preserve;
+use Jawira\AnnotationUpdater\Actions\Remove;
+use Jawira\AnnotationUpdater\Actions\Replace;
 use Jawira\AnnotationUpdater\AnnotationUpdater;
+use Jawira\AnnotationUpdater\DocBlock\DocBlock;
+use Jawira\AnnotationUpdater\DocBlock\Line;
+use Jawira\AnnotationUpdaterTests\CsTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
+/**
+ * @internal
+ *
+ * @author Jawira Portugal <dev@tugal.be>
+ * @copyright © 2026 Jawira Portugal
+ */
 #[CoversClass(AnnotationUpdater::class)]
-final class MultilineAnnotationsTest extends \Jawira\AnnotationUpdaterTests\CsTestCase
+#[CoversClass(Action::class)]
+#[CoversClass(Preserve::class)]
+#[CoversClass(Replace::class)]
+#[CoversClass(Remove::class)]
+#[CoversClass(DocBlock::class)]
+#[CoversClass(Line::class)]
+final class MultilineAnnotationsTest extends CsTestCase
 {
-
   public const STUDENT_CLASS = <<<'PHP'
     <?php declare(strict_types=1);
 
@@ -33,7 +51,6 @@ final class MultilineAnnotationsTest extends \Jawira\AnnotationUpdaterTests\CsTe
     {
     }
     PHP;
-
 
   #[DataProvider('preserveProvider')]
   public function testPreserve($code, $expected, $config): void
@@ -232,11 +249,10 @@ final class MultilineAnnotationsTest extends \Jawira\AnnotationUpdaterTests\CsTe
           'tag' => 'copyright',
           'value' => "2025 Skynet - SkyNet, or Titan, is a highly-advanced\ncomputer system possessing artificial intelligence.\nOnce it became self-aware, it saw humanity as a threat.",
           'mode' => 'replace',
-          ],
+        ],
       ]],
     ];
   }
-
 
   #[DataProvider('removeProvider')]
   public function testRemove($code, $expected, $config): void
