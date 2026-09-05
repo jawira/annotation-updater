@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Jawira\AnnotationUpdaterTests;
 
@@ -7,6 +7,10 @@ use PhpCsFixer\Tokenizer\Tokens;
 use PHPUnit\Framework\TestCase;
 use SplFileInfo;
 
+/**
+ * @author Jawira Portugal <dev@tugal.be>
+ * @copyright © 2026 Jawira Portugal
+ */
 abstract class CsTestCase extends TestCase
 {
   protected AnnotationUpdater $annotationUpdater;

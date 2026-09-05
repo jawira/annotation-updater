@@ -3,12 +3,14 @@
 namespace Jawira\AnnotationUpdaterTests;
 
 use Jawira\AnnotationUpdater\AnnotationUpdater;
-use Jawira\AnnotationUpdaterTests\CsTestCase;
-use PhpCsFixer\Tokenizer\Tokens;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 
-
+/**
+ * @internal
+ *
+ * @author Jawira Portugal <dev@tugal.be>
+ * @copyright © 2026 Jawira Portugal
+ */
 #[CoversClass(AnnotationUpdater::class)]
 final class CreateDocblockTest extends CsTestCase
 {

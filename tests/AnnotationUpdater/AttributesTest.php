@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace AnnotationUpdater;
 
@@ -7,6 +7,12 @@ use Jawira\AnnotationUpdaterTests\CsTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
+/**
+ * @internal
+ *
+ * @author Jawira Portugal <dev@tugal.be>
+ * @copyright © 2026 Jawira Portugal
+ */
 #[CoversClass(AnnotationUpdater::class)]
 class AttributesTest extends CsTestCase
 {
@@ -155,7 +161,6 @@ class AttributesTest extends CsTestCase
         ['tag' => 'author', 'value' => 'Jawira', 'mode' => 'preserve'],
       ]],
     ];
-
   }
 
   #[DataProvider('replaceProvider')]
@@ -358,5 +363,4 @@ class AttributesTest extends CsTestCase
       ]],
     ];
   }
-
 }

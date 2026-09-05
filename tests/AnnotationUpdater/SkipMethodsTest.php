@@ -6,7 +6,12 @@ use Jawira\AnnotationUpdater\AnnotationUpdater;
 use Jawira\AnnotationUpdaterTests\CsTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-
+/**
+ * @internal
+ *
+ * @author Jawira Portugal <dev@tugal.be>
+ * @copyright © 2026 Jawira Portugal
+ */
 #[CoversClass(AnnotationUpdater::class)]
 final class SkipMethodsTest extends CsTestCase
 {
@@ -149,6 +154,4 @@ final class SkipMethodsTest extends CsTestCase
     $actual = $this->generateCode($code, $config);
     $this->assertSame($expected, $actual);
   }
-
 }
-

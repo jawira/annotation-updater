@@ -7,7 +7,12 @@ use Jawira\AnnotationUpdaterTests\CsTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-
+/**
+ * @internal
+ *
+ * @author Jawira Portugal <dev@tugal.be>
+ * @copyright © 2026 Jawira Portugal
+ */
 #[CoversClass(AnnotationUpdater::class)]
 final class SkipAnnonymousClassesTest extends CsTestCase
 {
@@ -22,65 +27,65 @@ final class SkipAnnonymousClassesTest extends CsTestCase
   {
     yield [
       <<<'PHP'
-      <?php
-      /**
-       * Class with no annotation.
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with no annotation.
+         */
+        new class() {};
+        PHP,
       <<<'PHP'
-      <?php
-      /**
-       * Class with no annotation.
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with no annotation.
+         */
+        new class() {};
+        PHP,
       ['annotations' => [['tag' => 'author', 'value' => 'John Connor', 'mode' => 'preserve']]],
     ];
 
     yield [
       <<<'PHP'
-      <?php
-      /**
-       * Class with one annotation.
-       *
-       * @author Sarah Connor
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with one annotation.
+         *
+         * @author Sarah Connor
+         */
+        new class() {};
+        PHP,
       <<<'PHP'
-      <?php
-      /**
-       * Class with one annotation.
-       *
-       * @author Sarah Connor
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with one annotation.
+         *
+         * @author Sarah Connor
+         */
+        new class() {};
+        PHP,
       ['annotations' => [['tag' => 'author', 'value' => 'John Connor', 'mode' => 'preserve']]],
     ];
 
     yield [
       <<<'PHP'
-      <?php
-      /**
-       * Class with multiple annotation.
-       *
-       * @author John Connor
-       * @author Sarah Connor
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with multiple annotation.
+         *
+         * @author John Connor
+         * @author Sarah Connor
+         */
+        new class() {};
+        PHP,
       <<<'PHP'
-      <?php
-      /**
-       * Class with multiple annotation.
-       *
-       * @author John Connor
-       * @author Sarah Connor
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with multiple annotation.
+         *
+         * @author John Connor
+         * @author Sarah Connor
+         */
+        new class() {};
+        PHP,
       ['annotations' => [['tag' => 'author', 'value' => 'T-1000', 'mode' => 'preserve']]],
     ];
   }
@@ -96,65 +101,65 @@ final class SkipAnnonymousClassesTest extends CsTestCase
   {
     yield [
       <<<'PHP'
-      <?php
-      /**
-       * Class with no annotation.
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with no annotation.
+         */
+        new class() {};
+        PHP,
       <<<'PHP'
-      <?php
-      /**
-       * Class with no annotation.
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with no annotation.
+         */
+        new class() {};
+        PHP,
       ['annotations' => [['tag' => 'author', 'value' => 'John Connor', 'mode' => 'replace']]],
     ];
 
     yield [
       <<<'PHP'
-      <?php
-      /**
-       * Class with one annotation.
-       *
-       * @author Sarah Connor
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with one annotation.
+         *
+         * @author Sarah Connor
+         */
+        new class() {};
+        PHP,
       <<<'PHP'
-      <?php
-      /**
-       * Class with one annotation.
-       *
-       * @author Sarah Connor
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with one annotation.
+         *
+         * @author Sarah Connor
+         */
+        new class() {};
+        PHP,
       ['annotations' => [['tag' => 'author', 'value' => 'John Connor', 'mode' => 'replace']]],
     ];
 
     yield [
       <<<'PHP'
-      <?php
-      /**
-       * Class with multiple annotation.
-       *
-       * @author John Connor
-       * @author Sarah Connor
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with multiple annotation.
+         *
+         * @author John Connor
+         * @author Sarah Connor
+         */
+        new class() {};
+        PHP,
       <<<'PHP'
-      <?php
-      /**
-       * Class with multiple annotation.
-       *
-       * @author John Connor
-       * @author Sarah Connor
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with multiple annotation.
+         *
+         * @author John Connor
+         * @author Sarah Connor
+         */
+        new class() {};
+        PHP,
       ['annotations' => [['tag' => 'author', 'value' => 'T-1000', 'mode' => 'replace']]],
     ];
   }
@@ -170,67 +175,66 @@ final class SkipAnnonymousClassesTest extends CsTestCase
   {
     yield [
       <<<'PHP'
-      <?php
-      /**
-       * Class with no annotation.
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with no annotation.
+         */
+        new class() {};
+        PHP,
       <<<'PHP'
-      <?php
-      /**
-       * Class with no annotation.
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with no annotation.
+         */
+        new class() {};
+        PHP,
       ['annotations' => [['tag' => 'author', 'mode' => 'remove']]],
     ];
 
     yield [
       <<<'PHP'
-      <?php
-      /**
-       * Class with one annotation.
-       *
-       * @author Sarah Connor
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with one annotation.
+         *
+         * @author Sarah Connor
+         */
+        new class() {};
+        PHP,
       <<<'PHP'
-      <?php
-      /**
-       * Class with one annotation.
-       *
-       * @author Sarah Connor
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with one annotation.
+         *
+         * @author Sarah Connor
+         */
+        new class() {};
+        PHP,
       ['annotations' => [['tag' => 'author', 'mode' => 'remove']]],
     ];
 
     yield [
       <<<'PHP'
-      <?php
-      /**
-       * Class with multiple annotation.
-       *
-       * @author John Connor
-       * @author Sarah Connor
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with multiple annotation.
+         *
+         * @author John Connor
+         * @author Sarah Connor
+         */
+        new class() {};
+        PHP,
       <<<'PHP'
-      <?php
-      /**
-       * Class with multiple annotation.
-       *
-       * @author John Connor
-       * @author Sarah Connor
-       */
-      new class() {};
-      PHP,
+        <?php
+        /**
+         * Class with multiple annotation.
+         *
+         * @author John Connor
+         * @author Sarah Connor
+         */
+        new class() {};
+        PHP,
       ['annotations' => [['tag' => 'author', 'mode' => 'remove']]],
     ];
   }
 }
-

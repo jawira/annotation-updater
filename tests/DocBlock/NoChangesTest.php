@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Jawira\AnnotationUpdaterTests\DocBlock;
 
@@ -7,7 +7,12 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-
+/**
+ * @internal
+ *
+ * @author Jawira Portugal <dev@tugal.be>
+ * @copyright © 2026 Jawira Portugal
+ */
 #[CoversClass(DocBlock::class)]
 #[CoversClass(Line::class)]
 class NoChangesTest extends TestCase
@@ -1264,7 +1269,5 @@ class NoChangesTest extends TestCase
        * @author John Doe
        */
       PHP];
-
   }
-
 }
