@@ -2,13 +2,16 @@
 
 namespace Jawira\AnnotationUpdater\Actions;
 
-
+use InvalidArgumentException;
 use Jawira\AnnotationUpdater\DocBlock\DocBlock;
 
 /**
  * Remove annotation.
  *
- * The {@see \Jawira\AnnotationUpdater\Actions\Action::$value} property is empty because it's not used in "remove mode".
+ * The {@see Action::$value} property is empty because it's not used in "remove mode".
+ *
+ * @author Jawira Portugal <dev@tugal.be>
+ * @copyright © 2026 Jawira Portugal
  */
 final class Remove extends Action
 {
@@ -18,11 +21,10 @@ final class Remove extends Action
   {
     $this->tag = $tag;
     $this->value = '';
-    $mode === self::MODE or throw new \InvalidArgumentException("Invalid mode '$mode'");
+    self::MODE === $mode or throw new InvalidArgumentException("Invalid mode '{$mode}'");
   }
 
   /**
-   * @param array<int, string> $contentLines
    * @return array<int, string>
    */
   public function apply(DocBlock $docBlock): DocBlock

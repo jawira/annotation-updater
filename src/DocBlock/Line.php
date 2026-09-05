@@ -2,6 +2,21 @@
 
 namespace Jawira\AnnotationUpdater\DocBlock;
 
+use Exception;
+use PhpCsFixer\Preg;
+
+use function is_string;
+use function preg_quote;
+use function reset;
+use function str_ends_with;
+use function str_starts_with;
+use function strlen;
+use function substr;
+
+/**
+ * @author Jawira Portugal <dev@tugal.be>
+ * @copyright © 2026 Jawira Portugal
+ */
 readonly class Line
 {
   public bool $isOpening;
@@ -12,21 +27,21 @@ readonly class Line
 
   public function __construct(string $content)
   {
-    $this->isClosing = \str_ends_with($content, DocBlock::CLOSING);
+    $this->isClosing = str_ends_with($content, DocBlock::CLOSING);
     if ($this->isClosing) {
-      $content = \substr($content, 0, -\strlen(DocBlock::CLOSING));
+      $content = substr($content, 0, -strlen(DocBlock::CLOSING));
     }
 
-    $this->isOpening = \str_starts_with($content, DocBlock::OPENING);
-    $this->isIndented = 1 === \preg_match('~^\s*\*~', $content, $matches);
+    $this->isOpening = str_starts_with($content, DocBlock::OPENING);
+    $this->isIndented = Preg::match('~^\s*\*~', $content, $matches);
     if ($this->isOpening) {
       $this->indent = '';
-      $content = substr($content, \strlen(DocBlock::OPENING));
+      $content = substr($content, strlen(DocBlock::OPENING));
     } elseif ($this->isIndented) {
-      $match = \reset($matches);
-      \is_string($match) or throw new \Exception('Invalid indentation');
+      $match = reset($matches);
+      is_string($match) or throw new Exception('Invalid indentation');
       $this->indent = $match;
-      $content = \substr($content, \strlen($this->indent));
+      $content = substr($content, strlen($this->indent));
     } else {
       $this->indent = '';
     }
@@ -39,7 +54,7 @@ readonly class Line
    */
   public function isBlankLine(): bool
   {
-    return 1 === \preg_match('~^\s*$~', $this->content);
+    return Preg::match('~^\s*$~', $this->content);
   }
 
   /**
@@ -47,7 +62,7 @@ readonly class Line
    */
   public function isATag(): bool
   {
-    return 1 === \preg_match('~^\s*@\S+~', $this->content);
+    return Preg::match('~^\s*@\S+~', $this->content);
   }
 
   /**
@@ -57,6 +72,6 @@ readonly class Line
   {
     $tag = preg_quote($tag, '~');
 
-    return 1 === \preg_match('~^\s*@' . $tag . '(?=\s|$)~', $this->content);
+    return Preg::match('~^\s*@'.$tag.'(?=\s|$)~', $this->content);
   }
 }

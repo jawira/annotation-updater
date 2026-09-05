@@ -2,12 +2,14 @@
 
 namespace Jawira\AnnotationUpdater\Actions;
 
+use InvalidArgumentException;
 use Jawira\AnnotationUpdater\DocBlock\DocBlock;
-use function array_splice;
-use function in_array;
 
 /**
  * Replace annotation.
+ *
+ * @author Jawira Portugal <dev@tugal.be>
+ * @copyright © 2026 Jawira Portugal
  */
 final class Replace extends Action
 {
@@ -17,7 +19,7 @@ final class Replace extends Action
   {
     $this->tag = $tag;
     $this->value = $value;
-    $mode === self::MODE or throw new \InvalidArgumentException("Invalid mode '$mode'");
+    self::MODE === $mode or throw new InvalidArgumentException("Invalid mode '{$mode}'");
   }
 
   public function apply(DocBlock $docBlock): DocBlock
@@ -27,7 +29,7 @@ final class Replace extends Action
     }
 
     // Tag was never present
-    if ($docBlock->countTheTag($this->tag) === 0) {
+    if (0 === $docBlock->countTheTag($this->tag)) {
       $docBlock->removeTrailingBlankLines();
       $docBlock->pushLine($this->forgeLines());
 

@@ -2,15 +2,19 @@
 
 namespace Jawira\AnnotationUpdater\Actions;
 
-
 use Jawira\AnnotationUpdater\DocBlock\DocBlock;
 use Jawira\AnnotationUpdater\DocBlock\Line;
-use Jawira\AnnotationUpdater\RenderHelper;
+use PhpCsFixer\Preg;
+
+use function array_key_first;
 
 /**
  * Abstract Action.
  *
  * Concrete classes are used to read and validate configuration array.
+ *
+ * @author Jawira Portugal <dev@tugal.be>
+ * @copyright © 2026 Jawira Portugal
  */
 abstract class Action
 {
@@ -19,7 +23,6 @@ abstract class Action
   public string $value;
 
   /**
-   * @param array<int, string> $contentLines
    * @return array<int, string>
    */
   abstract public function apply(DocBlock $docBlock): DocBlock;
@@ -33,24 +36,25 @@ abstract class Action
   }
 
   /**
-   * Convert current {@see \Jawira\AnnotationUpdater\Actions\Action} is {@see \Jawira\AnnotationUpdater\DocBlock\Line} objects.
+   * Convert current {@see Action} is {@see Line} objects.
    *
    * When "content" attribute is composed of multiple lines then multiple lines are returned.
    *
-   * @return \Jawira\AnnotationUpdater\DocBlock\Line[]
+   * @return Line[]
    */
   public function forgeLines(): array
   {
-    $values = RenderHelper::split($this->value);
+    $values = Preg::split('~\R~', $this->value);
     $lines = [];
     foreach ($values as $key => $value) {
       // First contains the tag.
       if ($key === array_key_first($values)) {
-        $lines[] = new Line(DocBlock::INDENT . ' @' . $this->tag . ' ' . $value);
+        $lines[] = new Line(DocBlock::INDENT.' @'.$this->tag.DocBlock::SPACE.$value);
+
         continue;
       }
       // Add DocBlock indentation.
-      $lines[] = new Line(DocBlock::INDENT . ' ' . $value);
+      $lines[] = new Line(DocBlock::INDENT.DocBlock::SPACE.$value);
     }
 
     return $lines;

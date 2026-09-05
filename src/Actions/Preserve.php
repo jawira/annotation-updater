@@ -2,11 +2,14 @@
 
 namespace Jawira\AnnotationUpdater\Actions;
 
-
+use InvalidArgumentException;
 use Jawira\AnnotationUpdater\DocBlock\DocBlock;
 
 /**
  * Do not modify annotation if it's already present.
+ *
+ * @author Jawira Portugal <dev@tugal.be>
+ * @copyright © 2026 Jawira Portugal
  */
 final class Preserve extends Action
 {
@@ -16,12 +19,12 @@ final class Preserve extends Action
   {
     $this->tag = $tag;
     $this->value = $value;
-    $mode === self::MODE or throw new \InvalidArgumentException("Invalid mode '$mode'");
+    self::MODE === $mode or throw new InvalidArgumentException("Invalid mode '{$mode}'");
   }
 
   public function apply(DocBlock $docBlock): DocBlock
   {
-    if ($docBlock->countTheTag($this->tag) !== 0) {
+    if (0 !== $docBlock->countTheTag($this->tag)) {
       return $docBlock;
     }
     $docBlock->removeTrailingBlankLines();
