@@ -3,8 +3,10 @@
 namespace Jawira\AnnotationUpdater\DocBlock;
 
 use Exception;
+use InvalidArgumentException;
 use PhpCsFixer\Preg;
 
+use function is_array;
 use function is_string;
 use function preg_quote;
 use function reset;
@@ -17,7 +19,7 @@ use function substr;
  * @author Jawira Portugal <dev@tugal.be>
  * @copyright © 2026 Jawira Portugal
  */
-readonly class Line
+final readonly class Line
 {
   public bool $isOpening;
   public bool $isIndented;
@@ -38,8 +40,9 @@ readonly class Line
       $this->indent = '';
       $content = substr($content, strlen(DocBlock::OPENING));
     } elseif ($this->isIndented) {
+      is_array($matches) or throw new InvalidArgumentException('Cannot detect line indentation.'); // Make Psalm happy
       $match = reset($matches);
-      is_string($match) or throw new Exception('Invalid indentation');
+      is_string($match) or throw new Exception('Invalid indentation'); // Make Psalm happy
       $this->indent = $match;
       $content = substr($content, strlen($this->indent));
     } else {

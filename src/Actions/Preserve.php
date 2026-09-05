@@ -4,6 +4,7 @@ namespace Jawira\AnnotationUpdater\Actions;
 
 use InvalidArgumentException;
 use Jawira\AnnotationUpdater\DocBlock\DocBlock;
+use Override;
 
 /**
  * Do not modify annotation if it's already present.
@@ -13,15 +14,20 @@ use Jawira\AnnotationUpdater\DocBlock\DocBlock;
  */
 final class Preserve extends Action
 {
-  public const MODE = 'preserve';
-
   public function __construct(string $tag, string $value, string $mode)
   {
     $this->tag = $tag;
     $this->value = $value;
-    self::MODE === $mode or throw new InvalidArgumentException("Invalid mode '{$mode}'");
+    Preserve::getMode() === $mode or throw new InvalidArgumentException("Invalid mode '{$mode}'");
   }
 
+  #[Override]
+  public static function getMode(): string
+  {
+    return 'preserve';
+  }
+
+  #[Override]
   public function apply(DocBlock $docBlock): DocBlock
   {
     if (0 !== $docBlock->countTheTag($this->tag)) {

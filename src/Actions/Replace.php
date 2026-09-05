@@ -4,6 +4,9 @@ namespace Jawira\AnnotationUpdater\Actions;
 
 use InvalidArgumentException;
 use Jawira\AnnotationUpdater\DocBlock\DocBlock;
+use Override;
+
+use function is_int;
 
 /**
  * Replace annotation.
@@ -13,23 +16,30 @@ use Jawira\AnnotationUpdater\DocBlock\DocBlock;
  */
 final class Replace extends Action
 {
-  public const MODE = 'replace';
-
   public function __construct(string $tag, string $value, string $mode)
   {
     $this->tag = $tag;
     $this->value = $value;
-    self::MODE === $mode or throw new InvalidArgumentException("Invalid mode '{$mode}'");
+    Replace::getMode() === $mode or throw new InvalidArgumentException("Invalid mode '{$mode}'");
   }
 
+  #[Override]
+  public static function getMode(): string
+  {
+    return 'replace';
+  }
+
+  #[Override]
   public function apply(DocBlock $docBlock): DocBlock
   {
+    // Leave one tag if there's many
     while ($docBlock->countTheTag($this->tag) > 1) {
       $docBlock->removeLastTag($this->tag);
     }
 
-    // Tag was never present
-    if (0 === $docBlock->countTheTag($this->tag)) {
+    $index = $docBlock->lastPositionForTheTag($this->tag);
+    // tag was never present
+    if (!is_int($index)) {
       $docBlock->removeTrailingBlankLines();
       $docBlock->pushLine($this->forgeLines());
 
@@ -37,9 +47,8 @@ final class Replace extends Action
     }
 
     // Replace the last tag remaining
-    $position = $docBlock->lastPositionForTheTag($this->tag);
     $docBlock->removeLastTag($this->tag);
-    $docBlock->insertLines($this->forgeLines(), $position);
+    $docBlock->insertLines($this->forgeLines(), $index);
 
     return $docBlock;
   }

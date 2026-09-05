@@ -18,14 +18,15 @@ use function array_key_first;
  */
 abstract class Action
 {
-  public const MODE = '';
   public string $tag;
   public string $value;
 
-  /**
-   * @return array<int, string>
-   */
   abstract public function apply(DocBlock $docBlock): DocBlock;
+
+  /**
+   * @return non-empty-string
+   */
+  abstract public static function getMode(): string;
 
   /**
    * Tells if this action should create a docblock when one doesn't exist.

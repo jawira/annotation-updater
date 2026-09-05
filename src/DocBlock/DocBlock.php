@@ -15,7 +15,6 @@ use function array_values;
 use function count;
 use function end;
 use function implode;
-use function is_array;
 use function reset;
 use function str_ends_with;
 use function strlen;
@@ -34,7 +33,7 @@ use function trim;
  * @author Jawira Portugal <dev@tugal.be>
  * @copyright © 2026 Jawira Portugal
  */
-class DocBlock
+final class DocBlock
 {
   public const OPENING = '/**';
   public const INDENT = ' *';
@@ -51,7 +50,6 @@ class DocBlock
   public function __construct(string $content)
   {
     $lines = Preg::split('~\R~', $content);
-    is_array($lines) or throw new InvalidArgumentException('Not a valid DocBlock');
     $this->lines = array_map(fn (string $l): Line => new Line($l), $lines);
     $this->originallySingleLine = 1 === count($this->lines);
   }
@@ -79,6 +77,11 @@ class DocBlock
     return $count;
   }
 
+  /**
+   * Returns the index of the last occurence of the tag in a DocBlock.
+   *
+   * Return null if tag is not present.
+   */
   public function lastPositionForTheTag(string $tag): ?int
   {
     0 !== strlen(trim($tag)) or throw new InvalidArgumentException('Annotation cannot be empty string');

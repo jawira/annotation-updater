@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AnnotationUpdater;
+namespace Jawira\AnnotationUpdaterTests\AnnotationUpdater;
 
 use Jawira\AnnotationUpdater\Actions\Action;
 use Jawira\AnnotationUpdater\Actions\Preserve;
