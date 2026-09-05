@@ -20,10 +20,9 @@
     "friendsofphp/php-cs-fixer": "^3.0"
   },
   "require-dev": {
-    "jawira/skeleton": "^2.31",
-    "konradmichalik/php-doc-block-header-fixer": "^0.3.5",
-    "phpunit/phpunit": "^11",
-    "vimeo/psalm": "^6.16"
+    "jawira/skeleton": "^2.32",
+    "phpunit/phpunit": "^11.5.56",
+    "vimeo/psalm": "^6.16.1"
   },
   "autoload": {
     "psr-4": {
