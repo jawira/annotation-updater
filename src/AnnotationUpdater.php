@@ -113,7 +113,7 @@ final class AnnotationUpdater extends AbstractFixer implements ConfigurableFixer
   public function getConfigurationDefinition(): FixerConfigurationResolverInterface
   {
     return new FixerConfigurationResolver([
-      (new FixerOptionBuilder(self::ANNOTATIONS, 'List of tags configs.'))
+      (new FixerOptionBuilder(self::ANNOTATIONS, 'List of tag configurations'))
         ->setAllowedTypes(['string[][]'])
         ->setDefault([])
         ->getOption(),
