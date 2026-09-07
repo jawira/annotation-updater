@@ -4,10 +4,10 @@ use Jawira\AnnotationUpdater\AnnotationUpdater;
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
-$year = date('Y') === '2026' ? date('Y') : '2026-' . date('Y');
+$year = '2026' === \date('Y') ? \date('Y') : '2026-'.\date('Y');
 $rules = [
   '@PSR12' => true,
-  '@PHP8x5Migration' => true,
+  '@PHP8x2Migration' => true,
   '@PhpCsFixer' => true,
   'return_assignment' => false,
   'declare_strict_types' => true,
@@ -18,13 +18,12 @@ $rules = [
   AnnotationUpdater::NAME => [
     AnnotationUpdater::ANNOTATIONS => [
       ['tag' => 'author', 'value' => 'Jawira Portugal <dev@tugal.be>', 'mode' => 'preserve'],
-      ['tag' => 'copyright', 'value' => "© $year Jawira Portugal", 'mode' => 'replace'],
+      ['tag' => 'copyright', 'value' => "© {$year} Jawira Portugal", 'mode' => 'replace'],
       ['tag' => 'throws', 'mode' => 'remove'],
     ],
   ],
 ];
-$finder = Finder::create()->in([__DIR__ . '/src', __DIR__ . '/tests'])->name('*.php');
-
+$finder = Finder::create()->in([__DIR__.'/src', __DIR__.'/tests'])->name('*.php');
 
 return (new Config())
   ->setHideProgress(true)
@@ -32,4 +31,5 @@ return (new Config())
   ->setIndent('  ')
   ->setFinder($finder)
   ->registerCustomFixers([new AnnotationUpdater()])
-  ->setRules($rules);
+  ->setRules($rules)
+;
