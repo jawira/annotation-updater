@@ -1,12 +1,15 @@
-![jawira/annotation-updater](./resources/jawira-annotation-updater.svg)
+<div align="center"> 
+
+![jawira/annotation-updater](./resources/banner.svg)
 
 [![PHP Version Require](https://poser.pugx.org/jawira/annotation-updater/require/php?style=for-the-badge)](https://packagist.org/packages/jawira/annotation-updater)
 [![Latest Stable Version](https://poser.pugx.org/jawira/annotation-updater/v?style=for-the-badge)](https://packagist.org/packages/jawira/annotation-updater)
 [![License](https://poser.pugx.org/jawira/annotation-updater/license?style=for-the-badge)](https://packagist.org/packages/jawira/annotation-updater)
 
-This [PHP-CS-Fixer](https://cs.symfony.com/) rule allows you to **manage PHPDoc
-tags** in classes, interfaces, traits, and enums.   
-It helps maintain consistent documentation across your codebase.
+This [PHP-CS-Fixer](https://cs.symfony.com/) rule helps you **manage PHPDoc
+tags**<br>in classes, interfaces, traits, and enums.
+
+</div>
 
 ## Installation
 
@@ -69,7 +72,7 @@ annotation rules to apply.
 Each rule is an array with the following structure.
 
 - `tag`: The PHPDoc tag name without the `@`.
-- `value`: The value of the tad. Do not set this key for `remove` mode!
+- `value`: The value of the tag. Do not set this key for `remove` mode!
 - `mode`: One of `preserve`, `replace`, or `remove`.
 
 Example:
@@ -84,11 +87,15 @@ Example:
 
 ### Mode
 
-The fixer has three different modes.
+The fixer has three different modes:
 
-1. `preserve`: Do not replace the tags if it's already present.
-2. `replace`: Always replace the tag.
-3. `remove`: Remove the tag.
+1. **`preserve`**: Do not replace a tag if it is already present. If the tag is
+   missing, it will be added. For example, this mode can add an `@author` tag to
+   classes that do not already have one.
+2. **`replace`**: Always replace the tag with the configured value. This updates
+   the value of existing tags and adds the tag when it is not present.
+3. **`remove`**: Remove the tag if it is present. This is useful for deleting
+   unwanted tags, such as `@todo`.
 
 The `mode` behavior is summarized in the following table.
 
@@ -100,9 +107,9 @@ The `mode` behavior is summarized in the following table.
 
 ## Contributing
 
-- If you liked this project,
+- If you like this project,
   ⭐ [star it on GitHub](https://github.com/jawira/annotation-updater).
-- Or follow me on 𝕏.
+- Or, follow me on 𝕏.
   [![𝕏 Follow](https://img.shields.io/twitter/follow/jawira?style=social)](https://x.com/jawira)
 - Found a bug? Please report it by opening an issue!
 
@@ -112,9 +119,9 @@ This library is licensed under the [MIT license](./LICENSE.md).
 
 ## Disclaimer
 
-* Yes, I know `Annotations` are not the same as `PHPDoc tags`, but when I
-  realized this it was too late. Properly speaking, this library updates
-  `PHPDoc tags` and not `Annotations`.
+* Yes, I know that _annotations_ are not the same as _PHPDoc tags_, but when I
+  realized this, it was too late. Properly speaking, this library updates
+  _PHPDoc tags_, not _annotations_.
 * This project is inspired by `konradmichalik/php-doc-block-header-fixer`.
 
 ***
