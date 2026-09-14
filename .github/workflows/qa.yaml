@@ -1,0 +1,47 @@
+name: Quality Assurance
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+env:
+  COMPOSER_CACHE_DIR: /tmp/.composer
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ '8.2', '8.3', '8.4', '8.5' ]
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '${{ matrix.php }}'
+          tools: phing:v3
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v6
+        with:
+          path: ${{ env.COMPOSER_CACHE_DIR }}
+          key: ${{ runner.os }}-composer
+
+      - name: Install dependencies
+        run: phing composer:install
+
+      - name: Validate composer.json
+        run: phing composer:validate
+
+      - name: PHP-CS-Fixer
+        run: phing cs:check
+
+      - name: Psalm
+        run: phing psalm:check
+
+      - name: PHPUnit
+        run: phing phpunit:check

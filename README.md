@@ -6,6 +6,8 @@
 [![Latest Stable Version](https://poser.pugx.org/jawira/annotation-updater/v?style=for-the-badge)](https://packagist.org/packages/jawira/annotation-updater)
 [![License](https://poser.pugx.org/jawira/annotation-updater/license?style=for-the-badge)](https://packagist.org/packages/jawira/annotation-updater)
 
+[![Quality Assurance](https://github.com/jawira/annotation-updater/actions/workflows/qa.yaml/badge.svg?branch=main)](https://github.com/jawira/annotation-updater/actions/workflows/qa.yaml)
+
 This [PHP-CS-Fixer](https://cs.symfony.com/) rule helps you **manage PHPDoc
 tags**<br>in classes, interfaces, traits, and enums.
 

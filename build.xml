@@ -6,7 +6,7 @@
 
 
   <target name="setup" depends="composer:install"/>
-  <target name="qa" depends="composer:validate,cs:fix,psalm:check,composer:outdated,composer:audit"/>
+  <target name="qa" depends="composer:validate,cs:check,psalm:check,phpunit:check,composer:outdated,composer:audit"/>
 
 
   <target name="composer:install" description="Installs the project dependencies">
