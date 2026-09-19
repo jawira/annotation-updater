@@ -55,7 +55,7 @@ final class MultilineAnnotationsTest extends CsTestCase
   #[DataProvider('preserveProvider')]
   public function testPreserve($code, $expected, $config): void
   {
-    $actual = $this->generateCode($code, $config);
+    $actual = $this->applyAnnotationUpdater($code, $config);
     $this->assertSame($expected, $actual);
   }
 
@@ -129,7 +129,7 @@ final class MultilineAnnotationsTest extends CsTestCase
   #[DataProvider('replaceProvider')]
   public function testReplace($code, $expected, $config): void
   {
-    $actual = $this->generateCode($code, $config);
+    $actual = $this->applyAnnotationUpdater($code, $config);
     $this->assertSame($expected, $actual);
   }
 
@@ -257,7 +257,7 @@ final class MultilineAnnotationsTest extends CsTestCase
   #[DataProvider('removeProvider')]
   public function testRemove($code, $expected, $config): void
   {
-    $actual = $this->generateCode($code, $config);
+    $actual = $this->applyAnnotationUpdater($code, $config);
     $this->assertSame($expected, $actual);
   }
 

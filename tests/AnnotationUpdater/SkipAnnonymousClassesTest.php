@@ -31,7 +31,7 @@ final class SkipAnnonymousClassesTest extends CsTestCase
   #[DataProvider('preserveProvider')]
   public function testPreserve(string $code, string $expected, array $config): void
   {
-    $actual = $this->generateCode($code, $config);
+    $actual = $this->applyAnnotationUpdater($code, $config);
     $this->assertSame($expected, $actual);
   }
 
@@ -105,7 +105,7 @@ final class SkipAnnonymousClassesTest extends CsTestCase
   #[DataProvider('replaceProvider')]
   public function testReplace(string $code, string $expected, array $config): void
   {
-    $actual = $this->generateCode($code, $config);
+    $actual = $this->applyAnnotationUpdater($code, $config);
     $this->assertSame($expected, $actual);
   }
 
@@ -179,7 +179,7 @@ final class SkipAnnonymousClassesTest extends CsTestCase
   #[DataProvider('removeProvider')]
   public function testRemove(string $code, string $expected, array $config): void
   {
-    $actual = $this->generateCode($code, $config);
+    $actual = $this->applyAnnotationUpdater($code, $config);
     $this->assertSame($expected, $actual);
   }
 

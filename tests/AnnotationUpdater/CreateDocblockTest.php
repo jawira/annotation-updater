@@ -51,7 +51,7 @@ final class CreateDocblockTest extends CsTestCase
         ['tag' => 'author', 'value' => 'John Connor', 'mode' => 'preserve'],
       ],
     ];
-    $actual = $this->generateCode($code, $config);
+    $actual = $this->applyAnnotationUpdater($code, $config);
     $this->assertSame($expected, $actual);
   }
 
@@ -79,7 +79,7 @@ final class CreateDocblockTest extends CsTestCase
         ['tag' => 'author', 'value' => 'Sarah Connor', 'mode' => 'replace'],
       ],
     ];
-    $actual = $this->generateCode($code, $config);
+    $actual = $this->applyAnnotationUpdater($code, $config);
     $this->assertSame($expected, $actual);
   }
 
@@ -104,7 +104,7 @@ final class CreateDocblockTest extends CsTestCase
         ['tag' => 'author', 'mode' => 'remove'],
       ],
     ];
-    $actual = $this->generateCode($code, $config);
+    $actual = $this->applyAnnotationUpdater($code, $config);
     $this->assertSame($expected, $actual);
   }
 }
