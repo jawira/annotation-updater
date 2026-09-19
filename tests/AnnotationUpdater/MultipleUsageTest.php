@@ -31,7 +31,7 @@ final class MultipleUsageTest extends CsTestCase
   #[DataProvider('annotationProvider')]
   public function testMultipleAnnotations($code, $expected, $config): void
   {
-    $actual = $this->generateCode($code, $config);
+    $actual = $this->applyAnnotationUpdater($code, $config);
     $this->assertSame($expected, $actual);
   }
 

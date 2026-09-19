@@ -24,10 +24,19 @@ use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\Tokenizer\TokensAnalyzer;
 use SplFileInfo;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+use Symfony\Component\OptionsResolver\Options;
 
 use function array_any;
+use function array_values;
+use function compact;
+use function in_array;
+use function is_array;
 use function is_null;
+use function is_string;
 use function sprintf;
+use function strlen;
+use function trim;
 
 use const T_ABSTRACT;
 use const T_ATTRIBUTE;
@@ -115,9 +124,47 @@ final class AnnotationUpdater extends AbstractFixer implements ConfigurableFixer
     return new FixerConfigurationResolver([
       (new FixerOptionBuilder(self::ANNOTATIONS, 'List of tag configurations'))
         ->setAllowedTypes(['string[][]'])
+        ->setNormalizer(self::annotationNormalizer(...))
         ->setDefault([])
         ->getOption(),
     ]);
+  }
+
+  /**
+   * Cleaning "annotations" configuration.
+   *
+   * Attempts to normalize the configuration into a valid format.
+   */
+  public static function annotationNormalizer(Options $options, array $annotations): array
+  {
+    $annotations = array_values($annotations);
+
+    foreach ($annotations as $index => $a) {
+      is_array($a) or throw new InvalidOptionsException("Annotation at index {$index} is not an array.");
+
+      // Tag
+      $tag = $a['tag'] ?? null;
+      is_string($tag) or throw new InvalidOptionsException("Annotation at index {$index} has an invalid tag.");
+      $tag = trim($tag);
+      strlen($tag) or throw new InvalidOptionsException("Annotation at index {$index} has an empty tag.");
+
+      // Mode
+      $mode = $a['mode'] ?? null;
+      in_array($mode, [Preserve::getMode(), Replace::getMode(), Remove::getMode()], true) or throw new InvalidOptionsException("Annotation at index {$index} has an invalid mode.");
+      // Remove doesn't need a "value"
+      if ($mode === Remove::getMode()) {
+        $annotations[$index] = compact('mode', 'tag');
+
+        break;
+      }
+
+      // Value - Unlike Tag, empty string or with spaces are allowed.
+      $value = $a['value'] ?? null;
+      is_string($value) or throw new InvalidOptionsException("Annotation at index {$index} has an invalid value.");
+      $annotations[$index] = compact('tag', 'value', 'mode');
+    }
+
+    return $annotations;
   }
 
   /**

@@ -23,7 +23,7 @@ abstract class CsTestCase extends TestCase
   /**
    * Helper to run fixer.
    */
-  public function generateCode(string $code, array $config): string
+  public function applyAnnotationUpdater(string $code, array $config): string
   {
     $this->annotationUpdater->configure($config);
     $tokens = Tokens::fromCode($code);
